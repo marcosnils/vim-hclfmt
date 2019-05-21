@@ -10,8 +10,8 @@ endif
 
 " Below function is copied from vim-go's fmt.vim file.
 function! fmt#Format()
-    if !executable("hclfmt")
-        echo "hclfmt: could not find hclfmt. Please install it from github.com/fatih/hclfmt"
+    if !executable("terraform")
+        echo "could not find terraform executable. Install terraform for this plugin to work"
         return ""
     endif
 
@@ -22,13 +22,15 @@ function! fmt#Format()
     let l:tmpname = tempname()
     call writefile(getline(1, '$'), l:tmpname)
 
-    let fmt_command = "hclfmt"
+    let fmt_command = "terraform fmt"
 
     " populate the final command with user based fmt options
-    let command = fmt_command . ' -w ' . g:hcl_fmt_options
+    let command = fmt_command . ' -write ' . g:hcl_fmt_options
+
+    echo command
 
     " execute our command...
-    let out = system(command . " " . l:tmpname)
+    let out = system(command . " " . l:tmpname) 
 
     "if there is no error on the temp file replace the output with the current
     "file (if this fails, we can always check the outputs first line with:
